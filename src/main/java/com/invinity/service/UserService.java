@@ -3,6 +3,7 @@ package com.invinity.service;
 import com.invinity.model.User;
 import com.invinity.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,11 +18,21 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User addUser(User user) {
-        return userRepository.save(user);
+    public ResponseEntity<User> addUser(User user) {
+        if(userExist(user))
+            return ResponseEntity.status(409).body(null);
+        return ResponseEntity.ok().body(userRepository.save(user));
     }
 
-    public Optional<User> getUserById(String userId) {
-        return userRepository.findById(userId);
+    private boolean userExist(User user) {
+        return getUser(user).isPresent() ;
+    }
+
+    public Optional<User> getUser(User user) {
+        return userRepository.findByUsername(user.getUsername());
+    }
+
+    public Optional<User> getUserById(String id) {
+        return userRepository.findById(id);
     }
 }
