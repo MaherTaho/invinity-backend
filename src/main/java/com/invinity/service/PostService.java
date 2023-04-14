@@ -13,6 +13,8 @@ import java.util.Optional;
 public class PostService {
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private UserService userService;
     public ResponseEntity<List<Post>> getPosts() {
         return ResponseEntity.ok().body(postRepository.findAll());
     }
@@ -33,6 +35,8 @@ public class PostService {
     }
 
     public ResponseEntity<Optional<List<Post>>> getPostsByWriterId (String writerId) {
-        return ResponseEntity.ok().body(postRepository.findByWriterId(writerId));
+        if(userService.userExist(writerId))
+            return ResponseEntity.ok().body(postRepository.findByWriterId(writerId));
+        return ResponseEntity.status(404).body(null);
     }
 }

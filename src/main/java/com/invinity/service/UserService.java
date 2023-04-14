@@ -28,6 +28,9 @@ public class UserService {
     private boolean userExist(User user) {
         return getUser(user).isPresent() ;
     }
+    public boolean userExist(String userId) {
+        return getUserById(userId).isPresent();
+    }
 
     public Optional<User> getUser(User user) {
         return userRepository.findByUsername(user.getUsername());
