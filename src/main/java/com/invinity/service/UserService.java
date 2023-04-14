@@ -21,6 +21,7 @@ public class UserService {
     public ResponseEntity<User> addUser(User user) {
         if(userExist(user))
             return ResponseEntity.status(409).body(null);
+        user.setCreateAt(System.currentTimeMillis());
         return ResponseEntity.ok().body(userRepository.save(user));
     }
 

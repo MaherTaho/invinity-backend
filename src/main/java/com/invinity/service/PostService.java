@@ -25,9 +25,14 @@ public class PostService {
     public boolean postExist(String postId) {
         return postRepository.findById(postId).isPresent();
     }
-    public ResponseEntity<Post> addPost(Post post){
+    public ResponseEntity<Post> addPost(Post post) {
         if(postExist(post.getId()))
             return ResponseEntity.status(409).body(null);
+        post.setCreatedAt(System.currentTimeMillis());
         return ResponseEntity.ok().body(postRepository.save(post));
+    }
+
+    public ResponseEntity<Optional<List<Post>>> getPostsByWriterId (String writerId) {
+        return ResponseEntity.ok().body(postRepository.findByWriterId(writerId));
     }
 }

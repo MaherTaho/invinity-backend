@@ -1,6 +1,8 @@
 package com.invinity.controller;
 
+import com.invinity.model.Post;
 import com.invinity.model.User;
+import com.invinity.service.PostService;
 import com.invinity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,8 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private PostService postService;
     @GetMapping
 
     public List<User> getUsers() {
@@ -28,5 +32,10 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         return userService.addUser(user);
+    }
+
+    @GetMapping("/{id}/posts")
+    public ResponseEntity<Optional<List<Post>>> getUserPosts (@PathVariable(value = "id") String id) {
+        return postService.getPostsByWriterId(id);
     }
 }
